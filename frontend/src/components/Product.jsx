@@ -1,19 +1,17 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
 import {
   FavoriteBorderOutlined,
   SearchOutlined,
   ShoppingCartOutlined,
-} from '@mui/icons-material';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+} from "@mui/icons-material";
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 const Image = styled.img`
   height: 100%;
   z-index: 2;
   transition: all 0.5s ease;
 `;
-
 const Info = styled.div`
   opacity: 0;
   width: 100%;
@@ -27,9 +25,9 @@ const Info = styled.div`
   justify-content: center;
   transition: all 0.5s ease;
 `;
-
 const Container = styled.div`
   flex: 0 0 33%;
+  /* margin: 1%; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,27 +66,17 @@ const Icon = styled.div`
   }
 `;
 
-const Product = ({ products }) => {
-  const { id } = useParams();
-
-  const foundProduct = products.find(product => product.id === id);
-
-  if (!foundProduct) {
-    return <div>Produkt o id {id} nie został znaleziony.</div>;
-  }
-
-  const { name, price, image, link } = foundProduct;
-
+const Product = ({ item }) => {
   return (
     <Container>
       <Circle />
-      <Image src={image} />
+      <Image src={item.image} />
       <Info>
         <Icon>
           <ShoppingCartOutlined />
         </Icon>
         <Icon>
-          <Link to={`/product/${link}`}>
+          <Link to={`../product/${item._id}`}>
             <SearchOutlined />
           </Link>
         </Icon>

@@ -85,7 +85,7 @@ const Navbar = () => {
   const [data, setData] = useState();
   useEffect(() => {
     const myFetch = async () => {
-      const res = await publicRequest.get("carts");
+      const res = await publicRequest.get("/carts");
       setData(res.data.data.items.length);
     };
     myFetch();

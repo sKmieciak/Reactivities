@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-// import { products } from "../data";
 import Product from "./Product";
 import axios from "axios";
 
@@ -14,57 +13,53 @@ const Container = styled.div`
 
 const ProductList = ({ cat, filters, sort }) => {
   const [apiProducts, setApiProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+
   useEffect(() => {
     const getProducts = async () => {
       try {
         const res = await axios.get(
-          cat
-            ? `http://localhost:3001/products?category=${cat}`
-            : "http://localhost:3001/products"
+           "https://localhost:7080/api/Products/" + cat
         );
-        setApiProducts(res.data.data.products);
-      } catch (error) {}
+        console.log(cat);
+        setApiProducts(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.error(error);
+      }
     };
     getProducts();
   }, [cat]);
 
-  useEffect(() => {
-    setFilteredProducts(
-      apiProducts.filter((item) =>
-        Object.entries(filters).every(([key, value]) =>
-          item[key].includes(value)
-        )
-      )
-    );
-  }, [apiProducts, cat, filters]);
+  console.log(apiProducts);
 
-  useEffect(() => {
-    if (sort === "newest") {
-      setFilteredProducts((prev) =>
-        [...prev].sort((a, b) => a.createAt - b.createAt)
-      );
-    } else if (sort === "asc") {
-      setFilteredProducts((prev) =>
-        [...prev].sort((a, b) => a.price - b.price)
-      );
-    } else {
-      setFilteredProducts((prev) =>
-        [...prev].sort((a, b) => b.price - a.price)
-      );
-    }
-  }, [sort]);
-   useEffect(() => {
-     setFilteredProducts(apiProducts.map((item) => item));
-   }, [apiProducts]);
-  console.log(filteredProducts);
   return (
     <Container>
-      {filteredProducts.map((item) => (
-        <Product item={item} key={item._id} />
+      {apiProducts.map((item) => (
+        <ProductContainer key={item._id}>
+          <ProductImage src={item.image} alt={item.name} />
+          <ProductName>{item.name}</ProductName>
+          <ProductPrice>{item.price}</ProductPrice>
+        </ProductContainer>
       ))}
     </Container>
   );
 };
+
+const ProductContainer = styled.div`
+  width: 200px;
+  margin: 10px;
+`;
+
+const ProductImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+`;
+
+const ProductName = styled.h3`
+  margin: 10px 0;
+  font-size: 13px;
+`;
+
+const ProductPrice = styled.p``;
 
 export default ProductList;
